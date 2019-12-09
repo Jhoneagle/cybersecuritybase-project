@@ -1,1 +1,39 @@
 /target/
+.gradle
+/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+.idea
+*.db
+/out/
+*.iml
+
+nbactions-release-profile.xml
+nbactions.xml
+dependency-reduced-pom.xml
+.tmcproject.yml
+
+.nb-gradle
+.settings
+*~
+/bin/
+*.log
+*.zip
+.DS_Store
+.vscode
+*.properties
+
+
+report.docx
