@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -20,9 +21,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // no real security at the moment
+        http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
+
         http.authorizeRequests()
-                .anyRequest().permitAll();
+                .antMatchers(
+                        "/",
+                        "/register",
+                        "/js/**",
+                        "/css/**",
+                        "/img/**").permitAll()
+                .anyRequest().authenticated();
+
+        http.formLogin().loginPage("/login")
+                .defaultSuccessUrl("/home")
+                .permitAll()
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
     }
 
     @Autowired
