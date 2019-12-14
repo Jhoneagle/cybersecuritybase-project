@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -195,7 +195,6 @@ public class AuthenticationTest extends FluentTest {
         find("#username").fill().with("admin");
         find("#password").fill().with("aa");
         find("#passwordAgain").fill().with("ff");
-        find("#nickname").fill().with("test");
         find("#register-submit").submit();
 
         assertTrue(pageSource().contains("Register"));
@@ -203,7 +202,6 @@ public class AuthenticationTest extends FluentTest {
         assertTrue(pageSource().contains("Passwords length must be between 8-20 characters!"));
         assertTrue(pageSource().contains("The password fields must match!"));
         assertTrue(pageSource().contains("must not be empty"));
-        assertTrue(pageSource().contains("Nickname has been already taken!"));
     }
 
     @Test

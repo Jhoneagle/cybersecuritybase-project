@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      *
      * @return found user to the spring security in the right format.
      *
-     * @throws UsernameNotFoundException
+     * @throws UsernameNotFoundException if user not found
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

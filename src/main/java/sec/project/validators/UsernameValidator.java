@@ -15,11 +15,6 @@ public class UsernameValidator implements ConstraintValidator<Username, String> 
     @Autowired
     private AccountService accountService;
 
-    @Override
-    public void initialize(Username username) {
-
-    }
-
     /**
      * Checks from database if the username has been already taken and also checks if its preferred size.
      *

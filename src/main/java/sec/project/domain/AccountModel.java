@@ -1,7 +1,8 @@
 package sec.project.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import sec.project.validators.*;
+
+import javax.validation.constraints.NotEmpty;
 
 /**
  * Validation object for registration form.

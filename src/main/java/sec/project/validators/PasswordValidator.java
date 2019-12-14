@@ -9,11 +9,6 @@ import javax.validation.ConstraintValidatorContext;
  * @see Password
  */
 public class PasswordValidator implements ConstraintValidator<Password, String> {
-    @Override
-    public void initialize(Password password) {
-
-    }
-
     /**
      * Checks if the password applies the following rules.
      * Must be between 8 and 20 characters.
