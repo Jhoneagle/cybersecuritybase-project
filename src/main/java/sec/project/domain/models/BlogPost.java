@@ -6,10 +6,10 @@ public class BlogPost {
     private Long id;
     private String label;
     private String author;
-    private Long likes;
+    private int likes;
     private LocalDateTime timestamp;
 
-    public BlogPost(Long id, String label, String author, Long likes, LocalDateTime timestamp) {
+    public BlogPost(Long id, String label, String author, int likes, LocalDateTime timestamp) {
         this.id = id;
         this.label = label;
         this.author = author;
@@ -44,11 +44,11 @@ public class BlogPost {
         this.author = author;
     }
 
-    public Long getLikes() {
+    public int getLikes() {
         return likes;
     }
 
-    public void setLikes(Long likes) {
+    public void setLikes(int likes) {
         this.likes = likes;
     }
 

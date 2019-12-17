@@ -6,7 +6,7 @@ public class BlogPostModel extends BlogPost {
     private String content;
     private boolean likedAlready;
 
-    public BlogPostModel(Long id, String label, String author, Long likes, LocalDateTime timestamp, String content, boolean likedAlready) {
+    public BlogPostModel(Long id, String label, String author, int likes, LocalDateTime timestamp, String content, boolean likedAlready) {
         super(id, label, author, likes, timestamp);
         this.content = content;
         this.likedAlready = likedAlready;

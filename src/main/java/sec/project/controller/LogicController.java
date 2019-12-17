@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import sec.project.domain.models.BlogInfo;
 import sec.project.domain.models.BlogPost;
+import sec.project.domain.models.BlogPostModel;
 import sec.project.domain.models.UserModel;
 import sec.project.service.MainService;
 
@@ -19,39 +21,40 @@ public class LogicController {
     private MainService mainService;
 
     @GetMapping("/blogger/feed/{id}")
-    public String mainPage(@PathVariable Long id) {
-        return "done";
+    public String mainPage(Model model, @PathVariable Long id) {
+        BlogInfo blog = mainService.getBlogDetails(id);
+        model.addAttribute("blog", blog);
+        return "main-page";
     }
 
-    /**
-     * Returns search page showing there the result that was gotten by the parameter user gave.
-     * In this situations the list of persons whose first and/or last name withs the search parameter.
-     *
-     * @param model model object
-     * @param searchField search parameter
-     * @return template name.
-     */
-    @PostMapping("/old-face/searchPeople")
-    public String searchPeople(Model model, @RequestParam String searchField) {
-        List<UserModel> people = this.mainService.findPeopleWithParam(searchField);
+    @GetMapping("/blogger/feed/{accountId}/{postId}")
+    public String mainPage(Model model, @PathVariable Long accountId, @PathVariable Long postId) {
+        BlogPostModel blog = mainService.getFullPost(accountId, postId);
+        model.addAttribute("blog", blog);
+        return "full-blog-post";
+    }
 
+    @PostMapping("/blogger/searchPeople")
+    public String searchPeople(@RequestParam String searchField) {
+        return "redirect:/blogger/searchPeople/" + searchField;
+    }
+
+    @GetMapping("/blogger/searchPeople/{param}")
+    public String searchPeople(Model model, @PathVariable String param) {
+        List<UserModel> people = this.mainService.findPeopleWithParam(param);
         model.addAttribute("result", people);
         return "search-page-people";
     }
 
-    /**
-     * Returns search page showing there the result that was gotten by the parameter user gave.
-     * In this situations the list of persons whose first and/or last name withs the search parameter.
-     *
-     * @param model model object
-     * @param searchField search parameter
-     * @return template name.
-     */
-    @PostMapping("/old-face/searchPosts")
-    public String searchPosts(Model model, @RequestParam String searchField) {
-        List<BlogPost> people = this.mainService.findPostsWithParam(searchField);
+    @PostMapping("/blogger/searchPosts")
+    public String searchPosts(@RequestParam String searchField) {
+        return "redirect:/blogger/searchPosts/" + searchField;
+    }
 
-        model.addAttribute("result", people);
+    @GetMapping("/blogger/searchPosts/{param}")
+    public String searchPosts(Model model, @PathVariable String param) {
+        List<BlogPost> posts = this.mainService.findPostsWithParam(param);
+        model.addAttribute("result", posts);
         return "search-page-posts";
     }
 }
