@@ -1,4 +1,4 @@
-package sec.project.domain;
+package sec.project.domain.entities;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -23,6 +23,7 @@ public class Account extends AbstractPersistable<Long> {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.liked = new ArrayList<>();
         this.posts = new ArrayList<>();
         this.authorities = new ArrayList<>();
         this.follows = new HashSet<>();
@@ -88,6 +89,9 @@ public class Account extends AbstractPersistable<Long> {
             inverseJoinColumns = @JoinColumn(name = "followed_id", referencedColumnName = "id"))
     private Set<Account> follows;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Likes> liked;
+
     public Set<Account> getFollows() {
         return follows;
     }
@@ -102,5 +106,13 @@ public class Account extends AbstractPersistable<Long> {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public List<Likes> getLiked() {
+        return liked;
+    }
+
+    public void setLiked(List<Likes> liked) {
+        this.liked = liked;
     }
 }

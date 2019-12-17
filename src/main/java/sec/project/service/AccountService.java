@@ -3,8 +3,8 @@ package sec.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sec.project.domain.Account;
-import sec.project.domain.AccountModel;
+import sec.project.domain.entities.Account;
+import sec.project.domain.models.UserValidator;
 import sec.project.repository.AccountRepository;
 
 /**
@@ -32,7 +32,7 @@ public class AccountService {
     /**
      * Creates a new account and saves it into database according to the data gotten in the model.
      */
-    public void create(AccountModel account) {
+    public void create(UserValidator account) {
         Account validated = new Account();
         validated.setUsername(account.getUsername());
         validated.setPassword(passwordEncoder.encode(account.getPassword()));

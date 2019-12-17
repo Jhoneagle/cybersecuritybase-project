@@ -11,7 +11,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import sec.project.domain.Account;
+import sec.project.domain.entities.Account;
 import sec.project.repository.AccountRepository;
 
 import static org.junit.Assert.assertTrue;

@@ -1,6 +1,7 @@
-package sec.project.domain;
+package sec.project.domain.models;
 
-import sec.project.validators.*;
+import sec.project.validators.FieldMatch;
+import sec.project.validators.Username;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -9,18 +10,14 @@ import javax.validation.constraints.NotEmpty;
  *
  * @see FieldMatch
  * @see Username
- * @see Password
  */
 @FieldMatch(first = "password", second = "passwordAgain", message = "The password fields must match!") // Checks if both fields match perfectly.
-public class AccountModel {
+public class UserValidator {
     // Custom username check.
-    @NotEmpty
     @Username
     private String username;
 
-    // Custom password check.
     @NotEmpty
-    @Password
     private String password;
 
     @NotEmpty
@@ -32,7 +29,7 @@ public class AccountModel {
     @NotEmpty
     private String lastName;
 
-    public AccountModel(String username, String password, String passwordAgain, String firstName, String lastName) {
+    public UserValidator(String username, String password, String passwordAgain, String firstName, String lastName) {
         this.username = username;
         this.password = password;
         this.passwordAgain = passwordAgain;
@@ -40,7 +37,7 @@ public class AccountModel {
         this.lastName = lastName;
     }
 
-    public AccountModel() {
+    public UserValidator() {
     }
 
     public String getUsername() {

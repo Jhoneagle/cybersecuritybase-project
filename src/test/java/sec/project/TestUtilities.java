@@ -1,6 +1,6 @@
 package sec.project;
 
-import sec.project.domain.Account;
+import sec.project.domain.entities.Account;
 
 public class TestUtilities {
     public static Account createAccount(String username, String password) {
