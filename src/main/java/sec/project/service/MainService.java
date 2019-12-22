@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import sec.project.domain.entities.Account;
+import sec.project.domain.entities.Likes;
 import sec.project.domain.entities.Post;
-import sec.project.domain.models.BlogInfo;
-import sec.project.domain.models.BlogPost;
-import sec.project.domain.models.BlogPostModel;
-import sec.project.domain.models.UserModel;
+import sec.project.domain.models.*;
 import sec.project.repository.AccountRepository;
+import sec.project.repository.LikesRepository;
 import sec.project.repository.PostRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +27,9 @@ public class MainService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private LikesRepository likesRepository;
 
     public List<UserModel> findPeopleWithParam(String search) {
         // Parse the parameter in the actual parameter and get the result as raw data from database.
@@ -107,7 +109,64 @@ public class MainService {
         return new BlogInfo(name, amountFollows, canFollow, posts);
     }
 
-    public BlogPostModel getFullPost(Long accountId, Long postId) {
-        return null;
+    public BlogPostModel getFullPost(Long postId) {
+        String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
+
+        Post post = this.postRepository.getOne(postId);
+
+        BlogPostModel result = new BlogPostModel();
+
+        result.setAuthor(post.getCreator().toString());
+        result.setId(post.getId());
+        result.setLabel(post.getLabel());
+        result.setTimestamp(post.getTimestamp());
+        result.setContent(post.getContent());
+
+        List<Likes> likes = post.getLikes();
+        result.setLikes(likes.size());
+
+        likes.stream().filter(like -> like.getUser().getUsername().equals(byUsername.getUsername())).map(like -> true).forEach(result::setLikedAlready);
+
+        return result;
+    }
+
+    public void removePost(Long postId) {
+        Post post = this.postRepository.getOne(postId);
+        this.likesRepository.deleteAllByLikedPost(post);
+        this.postRepository.delete(post);
+    }
+
+    public void likePost(Long postId) {
+        String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
+
+        Post post = this.postRepository.getOne(postId);
+
+        Likes like = new Likes(byUsername, post);
+        this.likesRepository.save(like);
+    }
+
+    public void unlikePost(Long postId) {
+        Post post = this.postRepository.getOne(postId);
+
+        String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
+
+        Likes like = this.likesRepository.findByUserAndLikedPost(byUsername, post);
+        this.likesRepository.delete(like);
+    }
+
+    public void createPost(PostValidator postValidator) {
+        String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
+
+        Post post = new Post();
+        post.setContent(postValidator.getContent());
+        post.setCreator(byUsername);
+        post.setLabel(postValidator.getLabel());
+        post.setTimestamp(LocalDateTime.now());
+
+        this.postRepository.save(post);
     }
 }

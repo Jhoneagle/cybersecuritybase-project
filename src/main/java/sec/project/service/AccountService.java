@@ -7,9 +7,6 @@ import sec.project.domain.entities.Account;
 import sec.project.domain.models.UserValidator;
 import sec.project.repository.AccountRepository;
 
-/**
- * Service class for registration and login functions.
- */
 @Service
 public class AccountService {
     @Autowired
@@ -41,5 +38,11 @@ public class AccountService {
         validated.getAuthorities().add("USER");
 
         this.accountRepository.save(validated);
+    }
+
+    public void updatePassword(Long userId, String password) {
+        Account user = this.accountRepository.getOne(userId);
+        user.setPassword(passwordEncoder.encode(password));
+        this.accountRepository.save(user);
     }
 }

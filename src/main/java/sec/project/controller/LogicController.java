@@ -3,16 +3,12 @@ package sec.project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import sec.project.domain.models.BlogInfo;
-import sec.project.domain.models.BlogPost;
-import sec.project.domain.models.BlogPostModel;
-import sec.project.domain.models.UserModel;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import sec.project.domain.models.*;
 import sec.project.service.MainService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -28,10 +24,43 @@ public class LogicController {
     }
 
     @GetMapping("/blogger/feed/{accountId}/{postId}")
-    public String mainPage(Model model, @PathVariable Long accountId, @PathVariable Long postId) {
-        BlogPostModel blog = mainService.getFullPost(accountId, postId);
+    public String fullPost(Model model, @PathVariable Long accountId, @PathVariable Long postId) {
+        BlogPostModel blog = mainService.getFullPost(postId);
         model.addAttribute("blog", blog);
         return "full-blog-post";
+    }
+
+    @DeleteMapping("/blogger/feed/{accountId}/{postId}/remove")
+    public String removePost(@PathVariable Long accountId, @PathVariable Long postId) {
+        mainService.removePost(postId);
+        return "redirect:/blogger/feed/" + accountId;
+    }
+
+    @PostMapping("/blogger/feed/{accountId}/{postId}/like")
+    public String likePost(@PathVariable Long accountId, @PathVariable Long postId) {
+        mainService.likePost(postId);
+        return "redirect:/blogger/feed/" + accountId + "/" + postId;
+    }
+
+    @PostMapping("/blogger/feed/{accountId}/{postId}/unlike")
+    public String unlikePost(@PathVariable Long accountId, @PathVariable Long postId) {
+        mainService.unlikePost(postId);
+        return "redirect:/blogger/feed/" + accountId + "/" + postId;
+    }
+
+    @GetMapping("/blogger/create/post")
+    public String createPost(@ModelAttribute PostValidator postValidator) {
+        return "create-post";
+    }
+
+    @PostMapping("/blogger/create/post")
+    public String createPost(@Valid @ModelAttribute PostValidator postValidator, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "create-post";
+        }
+
+        this.mainService.createPost(postValidator);
+        return "redirect:/home";
     }
 
     @PostMapping("/blogger/searchPeople")
