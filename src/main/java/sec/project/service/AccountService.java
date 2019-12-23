@@ -4,8 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sec.project.domain.entities.Account;
+import sec.project.domain.models.AdminsModel;
 import sec.project.domain.models.UserValidator;
 import sec.project.repository.AccountRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -40,9 +45,18 @@ public class AccountService {
         this.accountRepository.save(validated);
     }
 
-    public void updatePassword(Long userId, String password) {
-        Account user = this.accountRepository.getOne(userId);
+    public void updatePassword(String username, String password) {
+        Account user = this.accountRepository.findByUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         this.accountRepository.save(user);
+    }
+
+    public void removeUser(String username) {
+        Account user = this.accountRepository.findByUsername(username);
+        this.accountRepository.delete(user);
+    }
+
+    public List<AdminsModel> getAllUsers() {
+        return this.accountRepository.findAll().stream().map(t -> new AdminsModel(t.toString(), t.getUsername())).collect(Collectors.toList());
     }
 }

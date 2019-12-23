@@ -1,6 +1,7 @@
 package sec.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -168,5 +169,12 @@ public class MainService {
         post.setTimestamp(LocalDateTime.now());
 
         this.postRepository.save(post);
+    }
+
+    public List<BlogPost> getAllPosts() {
+        Pageable pageable = PageRequest.of(0, 50, Sort.by("timestamp").descending());
+        Page<Post> posts = this.postRepository.findAll(pageable);
+
+        return getBlogPosts(posts.getContent());
     }
 }
