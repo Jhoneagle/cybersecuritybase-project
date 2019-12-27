@@ -55,7 +55,7 @@ public class MainService {
     }
 
     public List<BlogPost> findPostsWithParam(String searchField) {
-        Pageable pageable = PageRequest.of(0, 25, Sort.by("timestamp").descending());
+        Pageable pageable = PageRequest.of(0, 50, Sort.by("timestamp").descending());
         List<Post> posts = this.postRepository.findAllByLabelContainingIgnoreCase(searchField, pageable);
 
         return getBlogPosts(posts);

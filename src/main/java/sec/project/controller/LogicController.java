@@ -23,8 +23,8 @@ public class LogicController {
         return "main-page";
     }
 
-    @GetMapping("/blogger/feed/{accountId}/{postId}")
-    public String fullPost(Model model, @PathVariable Long accountId, @PathVariable Long postId) {
+    @GetMapping("/blogger/feed/{postId}")
+    public String fullPost(Model model, @PathVariable Long postId) {
         BlogPostModel blog = mainService.getFullPost(postId);
         model.addAttribute("blog", blog);
         return "full-blog-post";

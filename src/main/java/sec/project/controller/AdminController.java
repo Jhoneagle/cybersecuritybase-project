@@ -66,14 +66,14 @@ public class AdminController {
     }
 
     @Secured("ADMIN")
-    @DeleteMapping("/blogger/admin/feed/{postId}")
+    @PostMapping("/blogger/admin/feed/{postId}")
     public String removePost(@PathVariable Long postId) {
         this.mainService.removePost(postId);
         return "redirect:/blogger/admin";
     }
 
     @Secured("ADMIN")
-    @DeleteMapping("/blogger/admin/control/{username}")
+    @PostMapping("/blogger/admin/control/{username}")
     public String removeUser(@PathVariable String username) {
         this.accountService.removeUser(username);
         return "redirect:/blogger/admin";
