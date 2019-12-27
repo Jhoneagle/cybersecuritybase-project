@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{fragments/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml" layout:decorate="~{fragments/layout}">
     <head>
         <title>Home page</title>
     </head>
@@ -15,6 +16,13 @@
                             <p> Create new <a href="/blogger/create/post"> blog post </a></p>
                             <p> Update <a href="/blogger/password/update"> password </a></p>
                         </div>
+
+                        <p class="icon-bar" sec:authorize="hasAuthority('ADMIN')">
+                            <a href="/blogger/admin/users"> Admin users </a>
+                        </p>
+                        <p class="icon-bar" sec:authorize="hasAuthority('ADMIN')">
+                            <a href="/blogger/admin/posts"> Admin posts </a>
+                        </p>
                     </div>
                     <div class="col-sm-7">
                         <div class="row well" th:each="post : ${blog.posts}">
