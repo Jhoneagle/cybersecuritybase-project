@@ -8,7 +8,7 @@ import sec.project.domain.models.AdminsModel;
 import sec.project.domain.models.UserValidator;
 import sec.project.repository.AccountRepository;
 
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +19,21 @@ public class AccountService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @PostConstruct
+    public void setUp() {
+        if (this.accountRepository.findByUsername("admin") == null) {
+            Account admin = new Account();
+            admin.setUsername("admin");
+            admin.setPassword("$2a$10$aBDNqdqZ2m9jHYxIX7Q8P.TN2z9cBNq8DSYd3xkVfdYSxgEvkQO46");
+            admin.setFirstName("Never");
+            admin.setLastName("Hacked");
+            admin.getAuthorities().add("USER");
+            admin.getAuthorities().add("ADMIN");
+
+            this.accountRepository.save(admin);
+        }
+    }
 
     /**
      * Finds users account by his username.

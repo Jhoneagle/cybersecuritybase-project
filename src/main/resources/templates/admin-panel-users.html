@@ -7,7 +7,7 @@
         <div layout:fragment="content" class="container">
             <div class="container text-center">
                 <div class="row">
-                    <div class="col-sm-3 well">
+                    <div class="col-sm-3">
 
                     </div>
                     <div class="col-sm-7">
@@ -16,7 +16,7 @@
                                 <div class="panel panel-default text-left">
                                     <div class="panel-body">
                                         <p th:text="${user.name}"> name </p>
-                                        <p><a th:href="'/blogger/' + ${user.id} + '/password/update'"> Update his password </a></p>
+                                        <p><a th:href="'/blogger/' + ${user.username} + '/password/update'"> Update users password </a></p>
                                         <form th:action="@{/blogger/admin/control/{userId}(userId=${user.username})}" th:method="post">
                                             <div class="form-group">
                                                 <input type="submit" class="image-edit-button btn btn-danger" value="Delete"/>
@@ -27,7 +27,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2 well">
+                    <div class="col-sm-2">
 
                     </div>
                 </div>

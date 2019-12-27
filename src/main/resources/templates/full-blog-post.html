@@ -43,23 +43,25 @@
                             <span class="d-inline glyphicon glyphicon-time" th:text="${#temporals.format(blog.timestamp, 'dd-MM-yyyy HH:mm')}">time</span>
                         </h5>
 
-                        <p th:text="${blog.content}"> text </p>
+                        <p th:utext="${blog.content}"> text </p>
 
                         <span id="likes" th:text="${blog.likes}" class="badge badge-light p-1" style="margin-right: 5px;">0</span>Like
 
-                        <div th:if="${blog.likedAlready}">
-                            <form th:action="@{/blogger/feed/{accountId}/{postId}/unlike(accountId=${userId}, postId=${blog.id})}" th:method="post">
-                                <div class="form-group">
-                                    <input type="submit" class="btn-danger" value="Unlike"/>
-                                </div>
-                            </form>
-                        </div>
-                        <div th:unless="${blog.likedAlready}">
-                            <form th:action="@{/blogger/feed/{accountId}/{postId}/like(accountId=${userId}, postId=${blog.id})}" th:method="post">
-                                <div class="form-group">
-                                    <input type="submit" class="btn btn-success" value="Like"/>
-                                </div>
-                            </form>
+                        <div th:unless="${blog.ownsPost}">
+                            <div th:if="${blog.likedAlready}">
+                                <form th:action="@{/blogger/feed/{accountId}/{postId}/unlike(accountId=${userId}, postId=${blog.id})}" th:method="post">
+                                    <div class="form-group">
+                                        <input type="submit" class="btn-danger" value="Unlike"/>
+                                    </div>
+                                </form>
+                            </div>
+                            <div th:unless="${blog.likedAlready}">
+                                <form th:action="@{/blogger/feed/{accountId}/{postId}/like(accountId=${userId}, postId=${blog.id})}" th:method="post">
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-success" value="Like"/>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                         <div th:if="${blog.ownsPost}">
                             <form th:action="@{/blogger/feed/{accountId}/{postId}/remove(accountId=${userId}, postId=${blog.id})}" th:method="post">

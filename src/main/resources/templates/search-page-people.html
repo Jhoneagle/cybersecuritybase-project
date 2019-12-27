@@ -7,7 +7,7 @@
         <div layout:fragment="content" class="container">
             <div class="container text-center">
                 <div class="row" th:each="person : ${result}">
-                    <a th:href="'/old-face/' + ${person.id}">
+                    <a th:href="'/blogger/feed/' + ${person.id}">
                         <span th:text="${person.name}"> user </span>
                     </a>
                 </div>

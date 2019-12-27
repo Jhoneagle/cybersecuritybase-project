@@ -98,14 +98,14 @@ public class MainService {
         List<BlogPost> posts = getUsersRecentPosts(user);
 
         String name = user.toString();
-        Set<Account> follows = user.getFollows();
-        int amountFollows = follows.size();
+        Set<Account> followers = user.getFollowers();
+        int amountFollows = followers.size();
         boolean canFollow;
 
         if (byUsername.getUsername().equals(user.getUsername())) {
             canFollow = false;
         } else {
-            canFollow = follows.stream().noneMatch(t -> byUsername.getUsername().equals(t.getUsername()));
+            canFollow = followers.stream().noneMatch(t -> byUsername.getUsername().equals(t.getUsername()));
         }
 
         return new BlogInfo(name, amountFollows, canFollow, posts);
@@ -138,6 +138,13 @@ public class MainService {
         Post post = this.postRepository.getOne(postId);
         this.likesRepository.deleteAllByLikedPost(post);
         this.postRepository.delete(post);
+    }
+
+    public void removeAll(String username) {
+        Account user = this.accountRepository.findByUsername(username);
+        this.likesRepository.deleteAllByLikedPostIn(this.postRepository.findAllByCreator(user));
+        this.likesRepository.deleteAllByUser(user);
+        this.postRepository.deleteAllByCreator(user);
     }
 
     public void likePost(Long postId) {
@@ -196,9 +203,8 @@ public class MainService {
         String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
         Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
 
-        Account one = this.accountRepository.getOne(id);
-        byUsername.getFollows().add(one);
-        one.getFollows().add(byUsername);
+        Account one = getUser(id);
+        one.getFollowers().add(byUsername);
     }
 
     @Transactional
@@ -206,8 +212,7 @@ public class MainService {
         String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
         Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
 
-        Account one = this.accountRepository.getOne(id);
-        byUsername.getFollows().remove(one);
-        one.getFollows().remove(byUsername);
+        Account one = getUser(id);
+        one.getFollowers().remove(byUsername);
     }
 }

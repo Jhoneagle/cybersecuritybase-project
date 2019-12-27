@@ -19,6 +19,7 @@ public class Post extends AbstractPersistable<Long> {
     private Account creator;
 
     public Post() {
+        this.likes = new ArrayList<>();
     }
 
     public Post(String label, String content, LocalDateTime timestamp, Account creator) {

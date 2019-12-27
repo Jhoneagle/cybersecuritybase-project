@@ -7,7 +7,7 @@
         <div layout:fragment="content" class="container">
             <div class="container text-center">
                 <div class="row">
-                    <div class="col-sm-3 well">
+                    <div class="col-sm-3">
 
                     </div>
                     <div class="col-sm-7">
@@ -16,7 +16,7 @@
                                 <div class="panel panel-default text-left">
                                     <div class="panel-body">
                                         <p th:text="${post.author}"> author </p>
-                                        <p th:text="${post.label}"><a th:href="'/blogger/feed/' + ${post.id}"> label </a></p>
+                                        <a th:href="'/blogger/feed/posts/' + ${post.id}"><p th:text="${post.label}"> label </p></a>
                                         <h5>
                                             <span class="d-inline glyphicon glyphicon-time" th:text="${#temporals.format(post.timestamp, 'dd-MM-yyyy HH:mm')}">time</span>
                                         </h5>
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2 well">
+                    <div class="col-sm-2">
 
                     </div>
                 </div>

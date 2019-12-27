@@ -37,7 +37,7 @@ public class LogicController {
         return "redirect:/blogger/feed/" + id;
     }
 
-    @GetMapping("/blogger/feed/{postId}")
+    @GetMapping("/blogger/feed/posts/{postId}")
     public String fullPost(Model model, @PathVariable Long postId) {
         BlogPostModel blog = mainService.getFullPost(postId);
         model.addAttribute("blog", blog);
@@ -45,7 +45,7 @@ public class LogicController {
         return "full-blog-post";
     }
 
-    @DeleteMapping("/blogger/feed/{accountId}/{postId}/remove")
+    @PostMapping("/blogger/feed/{accountId}/{postId}/remove")
     public String removePost(@PathVariable Long accountId, @PathVariable Long postId) {
         mainService.removePost(postId);
         return "redirect:/blogger/feed/" + accountId;
@@ -54,13 +54,13 @@ public class LogicController {
     @PostMapping("/blogger/feed/{accountId}/{postId}/like")
     public String likePost(@PathVariable Long accountId, @PathVariable Long postId) {
         mainService.likePost(postId);
-        return "redirect:/blogger/feed/" + accountId + "/" + postId;
+        return "redirect:/blogger/feed/posts/" + postId;
     }
 
     @PostMapping("/blogger/feed/{accountId}/{postId}/unlike")
     public String unlikePost(@PathVariable Long accountId, @PathVariable Long postId) {
         mainService.unlikePost(postId);
-        return "redirect:/blogger/feed/" + accountId + "/" + postId;
+        return "redirect:/blogger/feed/posts/" + postId;
     }
 
     @GetMapping("/blogger/create/post")

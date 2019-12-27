@@ -10,4 +10,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByLabelContainingIgnoreCase(String label, Pageable pageable);
     List<Post> findAllByCreator(Account creator, Pageable pageable);
+    List<Post> findAllByCreator(Account creator);
+    void deleteAllByCreator(Account creator);
 }

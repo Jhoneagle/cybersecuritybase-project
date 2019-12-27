@@ -11,7 +11,7 @@
                     <div class="panel panel-default text-left">
                         <div class="panel-body">
                             <p th:text="${post.author}"> author </p>
-                            <p th:text="${post.label}"><a th:href="'/blogger/feed/' + ${post.id}"> label </a></p>
+                            <a th:href="'/blogger/feed/posts/' + ${post.id}"><p th:text="${post.label}"> label </p></a>
                             <h5>
                                 <span class="d-inline glyphicon glyphicon-time" th:text="${#temporals.format(post.timestamp, 'dd-MM-yyyy HH:mm')}">time</span>
                             </h5>

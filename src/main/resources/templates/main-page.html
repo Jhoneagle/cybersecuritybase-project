@@ -2,46 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{fragments/layout}">
     <head>
         <title>Home page</title>
-        <style>
-            .follow-button {
-                background-color: #7b906f;
-                position: absolute;
-                top: 40px;
-                right: 40px;
-                border-radius: 10px;
-                padding: 5px 40px;
-                color: white;
-                cursor: pointer;
-            }
-
-            .follow {
-                width: 100px;
-                height: 40px;
-                background-color: gray;
-            }
-
-            .follow:hover span {
-                display:none;
-            }
-
-            .follow:hover:before {
-                content: "Follow"
-            }
-
-            .unFollow {
-                width: 100px;
-                height: 40px;
-                background-color: gray;
-            }
-
-            .unFollow:hover span {
-                display:none;
-            }
-
-            .unFollow:hover:before {
-                content: "Unfollow"
-            }
-        </style>
     </head>
     <body>
         <div layout:fragment="content" class="container">
@@ -50,15 +10,6 @@
                     <div class="col-sm-3 well">
                         <div class="well">
                             <h1 th:text="${blog.name}"></h1>
-                        </div>
-                        <div class="well">
-                            <h2 th:text="'followers' + ${blog.follows}"></h2>
-                            <div th:if="${blog.canFollow}">
-                                <div class="follow-button follow"><h4><a th:href="'/blogger/feed/' + ${id} + '/follow'"> Follow </a></h4></div>
-                            </div>
-                            <div th:unless="${blog.canFollow}">
-                                <div class="follow-button unFollow"><h4><a th:href="'/blogger/feed/' + ${id} + '/unfollow'"> Following </a></h4></div>
-                            </div>
                         </div>
                         <div th:if="${owner}">
                             <p> Create new <a href="/blogger/create/post"> blog post </a></p>
@@ -71,25 +22,27 @@
                                 <div class="panel panel-default text-left">
                                     <div class="panel-body">
                                         <p th:text="${post.author}"> author </p>
-                                        <p th:text="${post.label}"><a th:href="'/blogger/feed/' + ${post.id}"> label </a></p>
+                                        <a th:href="'/blogger/feed/posts/' + ${post.id}"><p th:text="${post.label}"> label </p></a>
                                         <h5>
                                             <span class="d-inline glyphicon glyphicon-time" th:text="${#temporals.format(post.timestamp, 'dd-MM-yyyy HH:mm')}">time</span>
                                         </h5>
 
                                         <span id="likes" th:text="${post.likes}" class="badge badge-light p-1" style="margin-right: 5px;">0</span>Like
-
-                                        <form th:action="@{/blogger/admin/feed/{postId}(postId=${post.id})}" th:method="post">
-                                            <div class="form-group">
-                                                <input type="submit" class="image-edit-button btn btn-danger" value="Delete"/>
-                                            </div>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-2 well">
-
+                        <h2 th:text="'followers ' + ${blog.follows}"></h2>
+                        <div th:unless="${owner}">
+                            <div th:if="${blog.canFollow}">
+                                <div class="btn btn-success"><h4><a th:href="'/blogger/feed/' + ${id} + '/follow'"> Follow </a></h4></div>
+                            </div>
+                            <div th:unless="${blog.canFollow}">
+                                <div class="btn btn-danger"><h4><a th:href="'/blogger/feed/' + ${id} + '/unfollow'"> Following </a></h4></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

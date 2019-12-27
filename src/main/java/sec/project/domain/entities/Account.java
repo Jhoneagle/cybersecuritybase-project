@@ -25,9 +25,15 @@ public class Account extends AbstractPersistable<Long> {
         this.posts = new ArrayList<>();
         this.authorities = new ArrayList<>();
         this.follows = new HashSet<>();
+        this.followers = new HashSet<>();
     }
 
     public Account() {
+        this.liked = new ArrayList<>();
+        this.posts = new ArrayList<>();
+        this.authorities = new ArrayList<>();
+        this.follows = new HashSet<>();
+        this.followers = new HashSet<>();
     }
 
     public String getUsername() {
@@ -81,22 +87,14 @@ public class Account extends AbstractPersistable<Long> {
     @OneToMany(mappedBy = "creator")
     private List<Post> posts;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "Users_follows",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "followed_id", referencedColumnName = "id"))
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "followers")
     private Set<Account> follows;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Account> followers;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Likes> liked;
-
-    public Set<Account> getFollows() {
-        return follows;
-    }
-
-    public void setFollows(Set<Account> follows) {
-        this.follows = follows;
-    }
 
     public List<Post> getPosts() {
         return posts;
@@ -128,5 +126,28 @@ public class Account extends AbstractPersistable<Long> {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getUsername(), getFirstName(), getLastName());
+    }
+
+    public Set<Account> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<Account> followers) {
+        this.followers = followers;
+    }
+
+    public Set<Account> getFollows() {
+        return follows;
+    }
+
+    public void setFollows(Set<Account> follows) {
+        this.follows = follows;
+    }
+
+    @PreRemove
+    public void handleAssociations() {
+        this.followers.forEach(t -> t.getFollows().remove(this));
+
+        this.follows.forEach(t -> t.getFollowers().remove(this));
     }
 }
