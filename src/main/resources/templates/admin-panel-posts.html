@@ -20,7 +20,8 @@
                                         <h5>
                                             <span class="d-inline glyphicon glyphicon-time" th:text="${#temporals.format(post.timestamp, 'dd-MM-yyyy HH:mm')}">time</span>
                                         </h5>
-                                        <p th:text="${post.likes}"> likes </p>
+
+                                        <span id="likes" th:text="${post.likes}" class="badge badge-light p-1" style="margin-right: 5px;">0</span>Like
 
                                         <form th:action="@{/blogger/admin/feed/{postId}(postId=${post.id})}" th:method="post">
                                             <div class="form-group">

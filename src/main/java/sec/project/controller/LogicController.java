@@ -20,13 +20,28 @@ public class LogicController {
     public String mainPage(Model model, @PathVariable Long id) {
         BlogInfo blog = mainService.getBlogDetails(id);
         model.addAttribute("blog", blog);
+        model.addAttribute("owner", this.mainService.isOwnerOfBlog(id));
+        model.addAttribute("id", id);
         return "main-page";
+    }
+
+    @GetMapping("/blogger/feed/{id}/follow")
+    public String follow(@PathVariable Long id) {
+        this.mainService.followPerson(id);
+        return "redirect:/blogger/feed/" + id;
+    }
+
+    @GetMapping("/blogger/feed/{id}/unfollow")
+    public String unfollow(@PathVariable Long id) {
+        this.mainService.unFollowPerson(id);
+        return "redirect:/blogger/feed/" + id;
     }
 
     @GetMapping("/blogger/feed/{postId}")
     public String fullPost(Model model, @PathVariable Long postId) {
         BlogPostModel blog = mainService.getFullPost(postId);
         model.addAttribute("blog", blog);
+        model.addAttribute("userId", mainService.getCreatorId(postId));
         return "full-blog-post";
     }
 

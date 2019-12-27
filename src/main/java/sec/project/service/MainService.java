@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sec.project.domain.entities.Account;
 import sec.project.domain.entities.Likes;
 import sec.project.domain.entities.Post;
@@ -128,6 +129,7 @@ public class MainService {
         result.setLikes(likes.size());
 
         likes.stream().filter(like -> like.getUser().getUsername().equals(byUsername.getUsername())).map(like -> true).forEach(result::setLikedAlready);
+        result.setOwnsPost(post.getCreator().getUsername().equals(byUsername.getUsername()));
 
         return result;
     }
@@ -176,5 +178,36 @@ public class MainService {
         Page<Post> posts = this.postRepository.findAll(pageable);
 
         return getBlogPosts(posts.getContent());
+    }
+
+    public Long getCreatorId(Long postId) {
+        return this.postRepository.getOne(postId).getCreator().getId();
+    }
+
+    public boolean isOwnerOfBlog(Long id) {
+        String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
+
+        return id.equals(byUsername.getId());
+    }
+
+    @Transactional
+    public void followPerson(Long id) {
+        String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
+
+        Account one = this.accountRepository.getOne(id);
+        byUsername.getFollows().add(one);
+        one.getFollows().add(byUsername);
+    }
+
+    @Transactional
+    public void unFollowPerson(Long id) {
+        String loggedInPerson = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account byUsername = this.accountRepository.findByUsername(loggedInPerson);
+
+        Account one = this.accountRepository.getOne(id);
+        byUsername.getFollows().remove(one);
+        one.getFollows().remove(byUsername);
     }
 }

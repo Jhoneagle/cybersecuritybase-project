@@ -3,10 +3,8 @@ package sec.project.domain.entities;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;;
+import java.util.*;
+;
 
 @Entity
 public class Account extends AbstractPersistable<Long> {
@@ -114,5 +112,21 @@ public class Account extends AbstractPersistable<Long> {
 
     public void setLiked(List<Likes> liked) {
         this.liked = liked;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Account account = (Account) o;
+        return Objects.equals(getUsername(), account.getUsername()) &&
+                Objects.equals(getFirstName(), account.getFirstName()) &&
+                Objects.equals(getLastName(), account.getLastName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getUsername(), getFirstName(), getLastName());
     }
 }
